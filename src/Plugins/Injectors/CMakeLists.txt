@@ -5,7 +5,7 @@
 project(usbproxy_injectors C)
 set(PACKAGE usbproxy_injectors)
 
-LIST(APPEND PLUGINS Injector_UDP Injector_UDPHID)
+LIST(APPEND PLUGINS Injector_UDP Injector_UDPHID Injector_EvDev)
 
 include_directories(${libusbproxy_SOURCE_DIR})
 LIST(APPEND PLUGINS_LINK_LIBS USBProxy)
