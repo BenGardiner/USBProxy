@@ -16,6 +16,7 @@ extern "C" {
 #include "Injector_EvDev.h"
 #include "Packet.h"
 #include "HexString.h"
+#include "Injector.h"
 
 Injector_EVDEV::Injector_EVDEV(ConfigParser *cfg) {
 	input_device = "/dev/input/event1";
@@ -76,8 +77,12 @@ void Injector_EVDEV::get_packets(Packet** packet,SetupPacket** setup,int timeout
 		fprintf(stderr, "input: code %s %s\n",
 				ev.code == 1 ? "<0>":"<1>",
 				ev.value == 0 ? "key-released":"key-pressed");
-
+	
+		__u8 data[11] = {0x4B,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0xBE,0x70};
 		/*TODO fill-out USB packets*/
+		*packet=new Packet(0x01, data , 11, false);
+		(*packet)->transmit=true;
+		return;
 	}
 	else {
 		fprintf(stderr,"input device short read: %d, expected: %d \n", len, sizeof(ev));
