@@ -249,9 +249,11 @@ void Manager::start_control_relaying(){
 	//Claim interfaces
 	Configuration* cfg;
 	cfg=device->get_active_configuration();
-	int ifc_cnt=cfg->get_descriptor()->bNumInterfaces;
-	for (int i=0;i<ifc_cnt;i++) {
-	 	deviceProxy->claim_interface(i);
+	if(cfg) {
+		int ifc_cnt=cfg->get_descriptor()->bNumInterfaces;
+		for (int i=0;i<ifc_cnt;i++) {
+			deviceProxy->claim_interface(i);
+		}
 	}
 
 	if (status!=USBM_SETUP) {stop_relaying();return;}

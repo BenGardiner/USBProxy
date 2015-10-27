@@ -5,7 +5,7 @@
 project(usbproxy_hosts C)
 set(PACKAGE usbproxy_hosts)
 
-LIST(APPEND PLUGINS HostProxy_TCP)
+LIST(APPEND PLUGINS HostProxy_TCP HostProxy_Null)
 
 include_directories(${libusbproxy_SOURCE_DIR})
 LIST(APPEND PLUGINS_LINK_LIBS USBProxy)

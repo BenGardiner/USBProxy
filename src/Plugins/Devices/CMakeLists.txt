@@ -11,7 +11,7 @@ set(CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS} $ENV{CPPFLAGS} -std=gnu++11 -pthread -pe
 include_directories(${libusbproxy_SOURCE_DIR})
 LIST(APPEND PLUGINS_LINK_LIBS USBProxy)
 
-LIST(APPEND PLUGINS DeviceProxy_Loopback DeviceProxy_TCP DeviceProxy_Callback)
+LIST(APPEND PLUGINS DeviceProxy_Loopback DeviceProxy_TCP DeviceProxy_Callback DeviceProxy_Null)
 
 find_package(USB1)
 
