@@ -47,18 +47,6 @@ class USBKeyboardInterface(USBInterface):
                 [ self.endpoint ],
                 descriptors
         )
-
-        # "l<KEY UP>s<KEY UP><ENTER><KEY UP>"
-        #text = [ 0x0f, 0x00, 0x16, 0x00, 0x28, 0x00 ]
-        empty_preamble = [ chr(0x00) ] * 2
-
-        if text:
-            chars = list(text)
-        else:
-            chars = list(b"Hello there")
-        print(empty_preamble)
-        print(chars)
-        self.keys = empty_preamble + chars
         
         self.devices = map(InputDevice, ('/dev/input/event0', '/dev/input/event1'))
         self.devices = {dev.fd: dev for dev in self.devices}
@@ -66,10 +54,9 @@ class USBKeyboardInterface(USBInterface):
         self.letter_a = bytes([0, 0, 4])
         self.letter_q = bytes([0, 0, 14])
         
-    def handle_buffer_available(self):
-        if not self.keys:
-        	return
+        self.current_keys = bytes([0])
         
+    def handle_buffer_available(self):
         r,x,y = select(devices, [], [])
         for fd in r:
             for event in devices[fd].read():
@@ -77,17 +64,27 @@ class USBKeyboardInterface(USBInterface):
             		return
                 if event.code != 1 and event.code != 2:
                 	return
+
 		if event.value == 1: #if pressed
                 	if event.code == 1: #if button 1 is pressed
-                		self.endpoint.send(self.letter_a)
+                		current_keys.append(4)
                 		print("anti-brake key pressed")
                 	elif event.code == 2: #if button 2 is pressed
-                		self.endpoint.send(self.letter_q)
+                		current_keys.append(14)
                 		print("full throttle key pressed")
                 	
-        	elif event.value == 0: # if key released 
-        		self.endpoint.send(bytes([modifiers,0,0]))
-        		print("key released")
+        	elif event.value == 0: # if key released
+        		if event.code == 1:
+        			current_keys.remove(4)
+        			print("anti-brake key released")
+        		elif event.code == 2:
+        			current_keys.remove(14)
+        			print("full throttle key released")
+        	
+        	if not current_keys:
+        		current_keys = bytes([0])
+        	
+        	self.endpoint.send(bytes([0,0] + current_keys))
 
     def type_letter(self, keycode, modifiers=0):
         data = bytes([ modifiers, 0, keycode ])
