@@ -67,24 +67,24 @@ class USBKeyboardInterface(USBInterface):
 
 		if event.value == 1: #if pressed
                 	if event.code == 1: #if button 1 is pressed
-                		current_keys.append(4)
+                		self.current_keys.append(4)
                 		print("anti-brake key pressed")
                 	elif event.code == 2: #if button 2 is pressed
-                		current_keys.append(14)
+                		self.current_keys.append(14)
                 		print("full throttle key pressed")
                 	
         	elif event.value == 0: # if key released
         		if event.code == 1:
-        			current_keys.remove(4)
+        			self.current_keys.remove(4)
         			print("anti-brake key released")
         		elif event.code == 2:
-        			current_keys.remove(14)
+        			self.current_keys.remove(14)
         			print("full throttle key released")
         	
-        	if not current_keys:
-        		current_keys = bytes([0])
+        	if not self.current_keys:
+        		self.current_keys = bytes([0])
         	
-        	self.endpoint.send(bytes([0,0] + current_keys))
+        	self.endpoint.send(bytes([0,0] + self.current_keys))
 
     def type_letter(self, keycode, modifiers=0):
         data = bytes([ modifiers, 0, keycode ])
