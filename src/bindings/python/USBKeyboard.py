@@ -209,10 +209,11 @@ class USBKeyboardInterface(USBInterface):
                 if event.code != KEYCODE_BRAKESOFF and event.code != KEYCODE_GAS: #pass-through any other scancodes
                     if event.value == 1 and len(self.passthru_keys) < 4: #leave enough room for gas and brake suppression
                         print("pass-through of scancode %d" % event.code)
-                        self.passthru_keys.append(event.code)
+                        while event.code not in self.passthru_keys:
+                            self.passthru_keys.append(event.code)
                     else:
-                        #NB: removes the first value -- not all values
-                        self.passthru_keys.remove(event.code)
+                        while event.code in self.passthru_keys:
+                            self.passthru_keys.remove(event.code)
 
                     self.rate_limit()
                     return #always return after writing a packet
