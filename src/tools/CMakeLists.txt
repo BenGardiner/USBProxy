@@ -22,6 +22,9 @@ add_executable(evdev-usb-bridge evdev-usb-bridge.c)
 set_target_properties(evdev-usb-bridge PROPERTIES COMPILE_FLAGS -O0)
 install(TARGETS evdev-usb-bridge RUNTIME DESTINATION ${INSTALL_DEFAULT_BINDIR})
 
+add_executable(ignition-toggle ignition-toggle.c)
+install(TARGETS ignition-toggle RUNTIME DESTINATION ${INSTALL_DEFAULT_BINDIR})
+
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/buttonsme
 	${CMAKE_CURRENT_SOURCE_DIR}/inject-reset-button
