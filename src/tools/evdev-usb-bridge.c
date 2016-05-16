@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <string.h>
 
+//US layout USB HID Keyboard scan codes -- c.f. http://www.mindrunway.ru/IgorPlHex/USBKeyScan.pdf
 #define KEYCODE_WIPERS 0x1a // w
 #define KEYCODE_HUD 0x19 // v
 
